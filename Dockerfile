@@ -4,14 +4,11 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Install dependencies
 COPY package.json package-lock.json* ./
-RUN npm install
+RUN npm install --legacy-peer-deps
 
-# Copy source and Prisma schema
 COPY . .
 
-# Generate Prisma Client before building
 RUN npx prisma generate
 RUN npm run build
 
@@ -21,20 +18,15 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Install only production dependencies
 COPY package.json package-lock.json* ./
-RUN npm install --omit=dev
+RUN npm install --omit=dev --legacy-peer-deps
 
-# Copy built app and Prisma schema from builder
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
-
-# Copy generated Prisma Client from builder
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/client
 
 ENV PORT=3001
 EXPOSE 3001
 
-# Run database migrations and start the app
 CMD sh -c "npx prisma migrate deploy && node dist/main"
