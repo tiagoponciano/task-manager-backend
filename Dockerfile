@@ -29,4 +29,4 @@ COPY --from=builder /app/node_modules/@prisma/engines ./node_modules/@prisma/eng
 ENV PORT=3001
 EXPOSE 3001
 
-CMD sh -c "./node_modules/.bin/prisma migrate deploy && node dist/main"
+CMD sh -c "node ./node_modules/prisma/build/index.js migrate deploy && node dist/main"
