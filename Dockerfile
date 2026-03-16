@@ -2,8 +2,7 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-ENV NODE_ENV=production
-
+# Remove NODE_ENV=production aqui para instalar devDependencies também
 COPY package.json package-lock.json* ./
 RUN npm install --legacy-peer-deps
 
