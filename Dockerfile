@@ -22,6 +22,7 @@ RUN npm install --omit=dev --legacy-peer-deps
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 
 ENV PORT=3001
 EXPOSE 3001
